@@ -111,21 +111,16 @@ namespace Microsoft.PowerFx.Core.Texl.Builtins
                     type = typeSuper;
                     fArgsValid = false;
                 }
-                else if (!type.IsError)
+                else if (!type.IsError && !type.IsVoid)
                 {
                     if (typeArg.CoercesTo(type))
                     {
                         CollectionUtils.Add(ref nodeToCoercedTypeMap, nodeArg, type);
                     }
-                    else if (!isBehavior || !IsArgTypeInconsequential(nodeArg))
+                    else
                     {
-                        errors.EnsureError(
-                            DocumentErrorSeverity.Severe,
-                            nodeArg,
-                            TexlStrings.ErrBadType_ExpectedType_ProvidedType,
-                            type.GetKindString(),
-                            typeArg.GetKindString());
-                        fArgsValid = false;
+                        type = DType.Void;
+                        break;
                     }
                 }
                 else if (typeArg.Kind != DKind.Unknown)

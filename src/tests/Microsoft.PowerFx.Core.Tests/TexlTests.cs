@@ -521,14 +521,14 @@ namespace Microsoft.PowerFx.Core.Tests
 
             // Negative cases -- when args cannot be coerced.
 
-            TestBindingErrors(
+            TestSimpleBindingSuccess(
                 "If(A < 10, 1, [1,2,3])",
-                DType.Number,
+                DType.Void,
                 symbol);
 
-            TestBindingErrors(
+            TestSimpleBindingSuccess(
                 "If(A < 10, 1, {Value: 2})",
-                DType.Number,
+                DType.Void,
                 symbol);
         }
 

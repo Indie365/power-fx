@@ -52,6 +52,7 @@ namespace Microsoft.PowerFx.Core.Types
         public static readonly DType MinimalLargeImage = CreateMinimalLargeImageType();
         public static readonly DType UntypedObject = new DType(DKind.UntypedObject);
         public static readonly DType Deferred = new DType(DKind.Deferred);
+        public static readonly DType Void = new DType(DKind.Void);
 
         public static readonly DType Invalid = new DType();
 
@@ -570,6 +571,8 @@ namespace Microsoft.PowerFx.Core.Types
         public bool IsUnknown => Kind == DKind.Unknown;
 
         public bool IsDeferred => Kind == DKind.Deferred;
+
+        public bool IsVoid => Kind == DKind.Void;
 
         public bool IsError => Kind == DKind.Error;
 
@@ -1899,7 +1902,7 @@ namespace Microsoft.PowerFx.Core.Types
                         return TreeAccepts(this, TypeTree, type.TypeTree, out schemaDifference, out schemaDifferenceType, exact, useLegacyDateTimeAccepts);
                     }
 
-                    accepts = (IsMultiSelectOptionSet() && TypeTree.GetPairs().First().Value.OptionSetInfo == type.OptionSetInfo) || type.Kind == DKind.Unknown || type.Kind == DKind.Deferred;
+                    accepts = (IsMultiSelectOptionSet() && TypeTree.GetPairs().First().Value.OptionSetInfo == type.OptionSetInfo && type.Kind != DKind.Void) || type.Kind == DKind.Unknown || type.Kind == DKind.Deferred;
                     break;
 
                 case DKind.Enum:
@@ -2019,6 +2022,9 @@ namespace Microsoft.PowerFx.Core.Types
                 case DKind.LazyTable:
                 case DKind.LazyRecord:
                     accepts = LazyTypeAccepts(type, exact);
+                    break;
+                case DKind.Void:
+                    accepts = false;
                     break;
                 default:
                     Contracts.Assert(false);
@@ -3183,7 +3189,7 @@ namespace Microsoft.PowerFx.Core.Types
                                  Boolean.Accepts(this);
                     break;
                 case DKind.String:
-                    doesCoerce = Kind != DKind.Color && Kind != DKind.Control && Kind != DKind.DataEntity && Kind != DKind.OptionSet && Kind != DKind.View && Kind != DKind.Polymorphic && Kind != DKind.File && Kind != DKind.LargeImage;
+                    doesCoerce = Kind != DKind.Color && Kind != DKind.Control && Kind != DKind.DataEntity && Kind != DKind.OptionSet && Kind != DKind.View && Kind != DKind.Polymorphic && Kind != DKind.File && Kind != DKind.LargeImage && Kind != DKind.Void;
                     break;
                 case DKind.Hyperlink:
                     doesCoerce = Kind != DKind.Guid && String.Accepts(this);
@@ -3394,6 +3400,8 @@ namespace Microsoft.PowerFx.Core.Types
                     return "V";
                 case DKind.UntypedObject:
                     return "O";
+                case DKind.Void:
+                    return "-";
             }
         }
 
