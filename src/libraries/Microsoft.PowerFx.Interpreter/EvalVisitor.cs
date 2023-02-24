@@ -281,11 +281,8 @@ namespace Microsoft.PowerFx
                                 Kind = ex.ErrorKind
                             });
                     }
-
-                    if (IfFunction.CanCheckIfReturn(func))
-                    {
-                        Contract.Assert(result.IRContext.ResultType == node.IRContext.ResultType || result is ErrorValue || result.IRContext.ResultType is BlankType);
-                    }
+                    
+                    Contract.Assert(result.IRContext.ResultType == node.IRContext.ResultType || result is ErrorValue || result.IRContext.ResultType is BlankType || node.IRContext.ResultType._type.IsVoid);
                 }
                 else
                 {

@@ -41,13 +41,12 @@ namespace Microsoft.PowerFx.Interpreter.Tests
             }
         }
 
-#if false
         // Helper to run a single .txt 
         [Fact]
         public void RunOne()
         {
-            var path = @"D:\dev\pa2\Power-Fx\src\tests\Microsoft.PowerFx.Core.Tests\ExpressionTestCases\OptionSet.txt";
-            var line = 41;
+            var path = @"C:\Users\jasvalgotar\source\repos\Power-FX\src\tests\Microsoft.PowerFx.Core.Tests\ExpressionTestCases\If_AllowsSideEffects.txt";
+            var line = 31;
 
             var runner = new InterpreterRunner();
             var testRunner = new TestRunner(runner);
@@ -62,7 +61,6 @@ namespace Microsoft.PowerFx.Interpreter.Tests
 
             var result = testRunner.RunTests();
         }
-#endif
 
         // Run cases in MutationScripts
         // Normal tests have each line as an independent test case. 
